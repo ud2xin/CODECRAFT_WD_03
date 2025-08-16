@@ -40,30 +40,35 @@ function updateCell(cell, index) {
 
 function checkWinner() {
     let winnerFound = false;
+    let winningCombo = [];
 
     for (let i = 0; i < winConditions.length; i++) {
         const [a, b, c] = winConditions[i];
         if (board[a] && board[a] === board[b] && board[a] === board[c]) {
             winnerFound = true;
-
-            cells[a].classList.add("winning-cell");
-            cells[b].classList.add("winning-cell");
-            cells[c].classList.add("winning-cell");
-
+            winningCombo = [a, b, c];
             break;
         }
     }
 
     if (winnerFound) {
         statusText.textContent = `Player ${currentPlayer} wins! 🎉`;
+        winningCombo.forEach(index => cells[index].classList.add("winning-cell")); // ✅ highlight
         running = false;
     } else if (!board.includes("")) {
         statusText.textContent = "It's a draw! 🤝";
         running = false;
     } else {
         changePlayer();
+
+        // kalau mode AI dan giliran O
+        if (vsAI && currentPlayer === "O" && running) {
+            setTimeout(aiMove, 500);
+        }
     }
 }
+
+
 
 
 function changePlayer() {
@@ -81,4 +86,82 @@ function resetGame() {
         cell.textContent = "";
         cell.classList.remove("winning-cell");
     });
+}
+
+let vsAI = false;
+
+document.querySelector("#pvpBtn").addEventListener("click", () => {
+    resetGame();
+    vsAI = false;
+    statusText.textContent = "Mode: Player vs Player. Player X's turn";
+});
+
+document.querySelector("#aiBtn").addEventListener("click", () => {
+    resetGame();
+    vsAI = true;
+    statusText.textContent = "Mode: Player vs AI. Player X's turn";
+});
+
+function aiMove() {
+    let bestScore = -Infinity;
+    let move;
+    for (let i = 0; i < board.length; i++) {
+        if (board[i] === "") {
+            board[i] = "O";
+            let score = minimax(board, 0, false);
+            board[i] = "";
+            if (score > bestScore) {
+                bestScore = score;
+                move = i;
+            }
+        }
+    }
+    if (move !== undefined) {
+        updateCell(cells[move], move);
+        checkWinner();
+    }
+}
+
+function minimax(newBoard, depth, isMaximizing) {
+    let result = checkWinnerForMinimax(newBoard);
+    if (result !== null) {
+        if (result === "O") return 10 - depth;
+        if (result === "X") return depth - 10;
+        if (result === "draw") return 0;
+    }
+
+    if (isMaximizing) {
+        let bestScore = -Infinity;
+        for (let i = 0; i < newBoard.length; i++) {
+            if (newBoard[i] === "") {
+                newBoard[i] = "O";
+                let score = minimax(newBoard, depth + 1, false);
+                newBoard[i] = "";
+                bestScore = Math.max(score, bestScore);
+            }
+        }
+        return bestScore;
+    } else {
+        let bestScore = Infinity;
+        for (let i = 0; i < newBoard.length; i++) {
+            if (newBoard[i] === "") {
+                newBoard[i] = "X";
+                let score = minimax(newBoard, depth + 1, true);
+                newBoard[i] = "";
+                bestScore = Math.min(score, bestScore);
+            }
+        }
+        return bestScore;
+    }
+}
+
+function checkWinnerForMinimax(bd) {
+    for (let i = 0; i < winConditions.length; i++) {
+        const [a, b, c] = winConditions[i];
+        if (bd[a] && bd[a] === bd[b] && bd[a] === bd[c]) {
+            return bd[a];
+        }
+    }
+    if (!bd.includes("")) return "draw";
+    return null;
 }
