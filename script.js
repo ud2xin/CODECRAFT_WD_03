@@ -1,6 +1,11 @@
 const cells = document.querySelectorAll(".cell");
 const statusText = document.querySelector("#status");
 const resetBtn = document.querySelector("#reset");
+const aiSound = new Audio("assets/aiSound.mp3");
+const clickSound = new Audio("assets/clickSound.mp3");
+const winSound = new Audio("assets/winSound.mp3");
+const tieSound = new Audio("assets/tieSound.m4a");
+const btnSound = new Audio("assets/btnSound.mp3");
 
 let currentPlayer = "X";
 let board = ["", "", "", "", "", "", "", "", ""];
@@ -24,6 +29,7 @@ resetBtn.addEventListener("click", resetGame);
 statusText.textContent = `Player ${currentPlayer}'s turn`;
 
 function cellClicked() {
+    clickSound.play();
     const cellIndex = this.getAttribute("data-index");
     if (board[cellIndex] !== "" || !running) {
         return;
@@ -52,10 +58,12 @@ function checkWinner() {
     }
 
     if (winnerFound) {
+        winSound.play();
         statusText.textContent = `Player ${currentPlayer} wins! 🎉`;
         winningCombo.forEach(index => cells[index].classList.add("winning-cell")); // ✅ highlight
         running = false;
     } else if (!board.includes("")) {
+        tieSound.play();
         statusText.textContent = "It's a draw! 🤝";
         running = false;
     } else {
@@ -74,7 +82,7 @@ function changePlayer() {
 }
 
 function resetGame(randomFirst = false) {
-    // Jika randomFirst true, acak giliran pertama
+    btnSound.play();
     if (randomFirst) {
         currentPlayer = Math.random() < 0.5 ? "X" : "O";
     } else {
@@ -91,6 +99,7 @@ function resetGame(randomFirst = false) {
 
 // Event listener PvP tetap
 document.querySelector("#pvpBtn").addEventListener("click", () => {
+    btnSound.play();
     resetGame(true); // random giliran pertama
     vsAI = false;
     statusText.textContent = `Mode: Player vs Player. Player ${currentPlayer}'s turn`;
@@ -98,6 +107,7 @@ document.querySelector("#pvpBtn").addEventListener("click", () => {
 
 // Event listener AI
 document.querySelector("#aiBtn").addEventListener("click", () => {
+    btnSound.play();
     resetGame(true); // random giliran pertama
     vsAI = true;
     statusText.textContent = `Mode: Player vs AI. Player ${currentPlayer}'s turn`;
@@ -108,6 +118,7 @@ document.querySelector("#aiBtn").addEventListener("click", () => {
 });
 
 function aiMove() {
+    aiSound.play();
     let bestScore = -Infinity;
     let move;
     for (let i = 0; i < board.length; i++) {
