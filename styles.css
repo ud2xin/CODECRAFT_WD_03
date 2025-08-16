@@ -67,9 +67,9 @@ button:hover {
 }
 
 .winning-cell {
-    background-color: #a7156e;
-    color: #fff;               
-    font-weight: bold;
+    background-color: #a7156e !important;
+    color: #fff !important;               
+    font-weight: bold !important;
     transition: background-color 0.3s ease;
 }
 
