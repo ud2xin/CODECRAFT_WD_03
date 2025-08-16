@@ -45,6 +45,11 @@ function checkWinner() {
         const [a, b, c] = winConditions[i];
         if (board[a] && board[a] === board[b] && board[a] === board[c]) {
             winnerFound = true;
+
+            cells[a].classList.add("winning-cell");
+            cells[b].classList.add("winning-cell");
+            cells[c].classList.add("winning-cell");
+
             break;
         }
     }
@@ -53,12 +58,13 @@ function checkWinner() {
         statusText.textContent = `Player ${currentPlayer} wins! 🎉`;
         running = false;
     } else if (!board.includes("")) {
-        statusText.textContent = "It's a draw! 🤝"
+        statusText.textContent = "It's a draw! 🤝";
         running = false;
     } else {
         changePlayer();
     }
 }
+
 
 function changePlayer() {
     currentPlayer = (currentPlayer === "X") ? "O" : "X";
@@ -71,5 +77,8 @@ function resetGame() {
     board = ["", "", "", "", "", "", "", "", ""];
     running = true;
     statusText.textContent = `Player ${currentPlayer}'s turn`;
-    cells.forEach(cell => cell.textContent = "");
+    cells.forEach(cell => {
+        cell.textContent = "";
+        cell.classList.remove("winning-cell");
+    });
 }

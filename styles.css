@@ -66,6 +66,14 @@ button:hover {
     background-color: #870f5a;
 }
 
+.winning-cell {
+    background-color: #a7156e;
+    color: #fff;               
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+
 /* Responsif for mobile */
 @media (max-width: 500px) {
     .board {
