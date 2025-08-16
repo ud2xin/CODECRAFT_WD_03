@@ -68,17 +68,18 @@ function checkWinner() {
     }
 }
 
-
-
-
 function changePlayer() {
     currentPlayer = (currentPlayer === "X") ? "O" : "X";
     statusText.textContent = `Player ${currentPlayer}'s turn`;
 }
 
-
-function resetGame() {
-    currentPlayer = "X";
+function resetGame(randomFirst = false) {
+    // Jika randomFirst true, acak giliran pertama
+    if (randomFirst) {
+        currentPlayer = Math.random() < 0.5 ? "X" : "O";
+    } else {
+        currentPlayer = "X";
+    }
     board = ["", "", "", "", "", "", "", "", ""];
     running = true;
     statusText.textContent = `Player ${currentPlayer}'s turn`;
@@ -88,18 +89,22 @@ function resetGame() {
     });
 }
 
-let vsAI = false;
-
+// Event listener PvP tetap
 document.querySelector("#pvpBtn").addEventListener("click", () => {
-    resetGame();
+    resetGame(true); // random giliran pertama
     vsAI = false;
-    statusText.textContent = "Mode: Player vs Player. Player X's turn";
+    statusText.textContent = `Mode: Player vs Player. Player ${currentPlayer}'s turn`;
 });
 
+// Event listener AI
 document.querySelector("#aiBtn").addEventListener("click", () => {
-    resetGame();
+    resetGame(true); // random giliran pertama
     vsAI = true;
-    statusText.textContent = "Mode: Player vs AI. Player X's turn";
+    statusText.textContent = `Mode: Player vs AI. Player ${currentPlayer}'s turn`;
+    // Jika AI duluan, langsung jalan
+    if (currentPlayer === "O") {
+        setTimeout(aiMove, 500);
+    }
 });
 
 function aiMove() {
