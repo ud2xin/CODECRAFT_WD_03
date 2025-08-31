@@ -28,7 +28,7 @@ CODECRAFT_WD_02/
 ## 🚀 How to Use
 1. Clone this repository  
    ```bash
-   git clone <repo-link>
+   git clone https://github.com/ud2xin/CODECRAFT_WD_03
 2. Open index.html in your browser
 3. Use the Start, Pause, and Reset buttons to operate the stopwatch
 
