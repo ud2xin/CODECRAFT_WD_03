@@ -1,11 +1,11 @@
 const cells = document.querySelectorAll(".cell");
 const statusText = document.querySelector("#status");
 const resetBtn = document.querySelector("#reset");
-const aiSound = new Audio("assets/aiSound.mp3");
-const clickSound = new Audio("assets/clickSound.mp3");
-const winSound = new Audio("assets/winSound.mp3");
-const tieSound = new Audio("assets/tieSound.m4a");
-const btnSound = new Audio("assets/btnSound.mp3");
+const aiSound = new Audio("assets/sounds/aiSound.mp3");
+const clickSound = new Audio("assets/sounds/clickSound.mp3");
+const winSound = new Audio("assets/sounds/winSound.mp3");
+const tieSound = new Audio("assets/sounds/tieSound.m4a");
+const btnSound = new Audio("assets/sounds/btnSound.mp3");
 
 let currentPlayer = "X";
 let board = ["", "", "", "", "", "", "", "", ""];
